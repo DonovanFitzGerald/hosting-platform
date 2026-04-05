@@ -52,6 +52,7 @@ services:
             - --storage.tsdb.retention.time=${PROMETHEUS_RETENTION}
         volumes:
             - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+            - ./prometheus/blackbox-targets-static.yml:/etc/prometheus/blackbox-targets-static.yml:ro
             - prometheus_data:/prometheus
         networks:
             - monitoring
