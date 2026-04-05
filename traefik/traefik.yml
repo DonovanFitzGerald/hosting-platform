@@ -1,0 +1,25 @@
+api:
+    dashboard: true
+    insecure: false
+
+entryPoints:
+    web:
+        address: ":80"
+    websecure:
+        address: ":443"
+
+providers:
+    docker:
+        exposedByDefault: false
+        network: proxy
+
+log:
+    level: INFO
+
+accessLog: {}
+
+metrics:
+    prometheus:
+        addEntryPointsLabels: true
+        addRoutersLabels: true
+        addServicesLabels: true
