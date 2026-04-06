@@ -23,7 +23,7 @@ services:
             - traefik.http.routers.traefik.service=api@internal
 
     grafana:
-        image: grafana/grafana:11.1.0
+        image: grafana/grafana:12.4.2
         container_name: grafana
         restart: unless-stopped
         environment:
@@ -44,7 +44,7 @@ services:
             - traefik.http.services.grafana.loadbalancer.server.port=3000
 
     prometheus:
-        image: prom/prometheus:v2.54.1
+        image: prom/prometheus:v3.11.0
         container_name: prometheus
         restart: unless-stopped
         command:
@@ -58,7 +58,7 @@ services:
             - monitoring
 
     loki:
-        image: grafana/loki:3.1.1
+        image: grafana/loki:3.7.1
         container_name: loki
         restart: unless-stopped
         command: -config.file=/etc/loki/config.yml
@@ -69,7 +69,7 @@ services:
             - monitoring
 
     alloy:
-        image: grafana/alloy:v1.3.1
+        image: grafana/alloy:v1.15.1
         container_name: alloy
         restart: unless-stopped
         command:
@@ -84,7 +84,7 @@ services:
             - monitoring
 
     node-exporter:
-        image: prom/node-exporter:v1.8.2
+        image: prom/node-exporter:v1.11.0
         container_name: node-exporter
         restart: unless-stopped
         command:
@@ -116,14 +116,14 @@ services:
             - monitoring
 
     blackbox-exporter:
-        image: prom/blackbox-exporter:v0.25.0
+        image: prom/blackbox-exporter:v0.28.0
         container_name: blackbox-exporter
         restart: unless-stopped
         networks:
             - monitoring
 
     redis:
-        image: redis:7.4-alpine
+        image: redis:8.6.0-alpine
         container_name: redis
         restart: unless-stopped
         command: >
@@ -136,7 +136,7 @@ services:
             - redis
 
     redis-exporter:
-        image: oliver006/redis_exporter:v1.62.0
+        image: oliver006/redis_exporter:v1.82.0
         container_name: redis-exporter
         restart: unless-stopped
         environment:
