@@ -1,12 +1,24 @@
 discovery.docker "containers" {
-  host = "unix:///var/run/docker.sock"
+  host             = "unix:///var/run/docker.sock"
+  refresh_interval = "5s"
 }
 
 discovery.relabel "docker_logs" {
   targets = discovery.docker.containers.targets
 
   rule {
+    target_label = "job"
+    replacement  = "docker"
+  }
+
+  rule {
+    target_label = "instance"
+    replacement  = constants.hostname
+  }
+
+  rule {
     source_labels = ["__meta_docker_container_name"]
+    regex         = "/(.*)"
     target_label  = "container"
   }
 
@@ -19,13 +31,19 @@ discovery.relabel "docker_logs" {
     source_labels = ["__meta_docker_container_label_com_docker_compose_project"]
     target_label  = "compose_project"
   }
+
+  rule {
+    source_labels = ["__meta_docker_container_log_stream"]
+    target_label  = "stream"
+  }
 }
 
 loki.source.docker "containers" {
-  host       = "unix:///var/run/docker.sock"
-  targets    = discovery.docker.containers.targets
-  labels     = discovery.relabel.docker_logs.rules
-  forward_to = [loki.write.default.receiver]
+  host             = "unix:///var/run/docker.sock"
+  targets          = discovery.docker.containers.targets
+  relabel_rules    = discovery.relabel.docker_logs.rules
+  forward_to       = [loki.write.default.receiver]
+  refresh_interval = "5s"
 }
 
 loki.write "default" {
