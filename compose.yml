@@ -110,6 +110,8 @@ services:
             - --docker_only=true
         ports:
             - "8080:8080"
+        networks:
+            - monitoring
 
     blackbox-exporter:
         image: prom/blackbox-exporter:v0.25.0
