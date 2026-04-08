@@ -33,7 +33,7 @@ hosting-platform/
 Prometheus supports two blackbox target sources in this stack:
 
 - `prometheus/blackbox-targets-static.yml` for static probes.
-- Docker label discovery for containers attached to `${PROXY_NETWORK}`.
+- Docker label discovery for containers attached to the `proxy` network.
 
 To opt a proxied container into automatic blackbox probing, add labels like:
 
@@ -59,4 +59,4 @@ Optional labels:
 - `monitoring.blackbox.path` defaults to `/`.
 - `monitoring.blackbox.scheme` defaults to `https`.
 
-The container must be attached to the proxy network so Prometheus can discover it through the Docker API filter.
+The container must be attached to the `proxy` network so Prometheus can discover it through the Docker API filter.

@@ -56,8 +56,6 @@ services:
         command:
             - --config.file=/etc/prometheus/prometheus.yml
             - --storage.tsdb.retention.time=${PROMETHEUS_RETENTION}
-        environment:
-            PROXY_NETWORK: ${PROXY_NETWORK}
         volumes:
             - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
             - ./prometheus/blackbox-targets-static.yml:/etc/prometheus/blackbox-targets-static.yml:ro
