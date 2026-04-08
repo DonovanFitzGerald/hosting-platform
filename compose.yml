@@ -21,6 +21,9 @@ services:
             - traefik.http.routers.traefik.entrypoints=websecure
             - traefik.http.routers.traefik.tls=true
             - traefik.http.routers.traefik.service=api@internal
+            - monitoring.blackbox.enable=true
+            - monitoring.blackbox.hostname=${TRAEFIK_DOMAIN}
+            - monitoring.blackbox.scheme=https
 
     grafana:
         image: grafana/grafana:12.4.2
@@ -42,6 +45,9 @@ services:
             - traefik.http.routers.grafana.entrypoints=websecure
             - traefik.http.routers.grafana.tls=true
             - traefik.http.services.grafana.loadbalancer.server.port=3000
+            - monitoring.blackbox.enable=true
+            - monitoring.blackbox.hostname=${GRAFANA_DOMAIN}
+            - monitoring.blackbox.scheme=https
 
     prometheus:
         image: prom/prometheus:v3.11.0
@@ -50,9 +56,12 @@ services:
         command:
             - --config.file=/etc/prometheus/prometheus.yml
             - --storage.tsdb.retention.time=${PROMETHEUS_RETENTION}
+        environment:
+            PROXY_NETWORK: ${PROXY_NETWORK}
         volumes:
             - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
             - ./prometheus/blackbox-targets-static.yml:/etc/prometheus/blackbox-targets-static.yml:ro
+            - /var/run/docker.sock:/var/run/docker.sock:ro
             - prometheus_data:/prometheus
         networks:
             - monitoring
