@@ -57,6 +57,11 @@ services:
         container_name: prometheus
         user: "0:0"
         restart: unless-stopped
+        environment:
+            DO_MANAGED_MYSQL_CLUSTER_ID: ${DO_MANAGED_MYSQL_CLUSTER_ID}
+            DO_MANAGED_MYSQL_METRICS_HOST: ${DO_MANAGED_MYSQL_METRICS_HOST}
+            DO_MANAGED_MYSQL_METRICS_USERNAME: ${DO_MANAGED_MYSQL_METRICS_USERNAME}
+            DO_MANAGED_MYSQL_METRICS_PASSWORD: ${DO_MANAGED_MYSQL_METRICS_PASSWORD}
         entrypoint:
             - /bin/sh
             - -ec
