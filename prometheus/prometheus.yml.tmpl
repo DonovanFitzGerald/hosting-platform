@@ -54,7 +54,6 @@ scrape_configs:
                 - name: network
                   values:
                       - proxy
-
       relabel_configs:
           - source_labels:
                 [__meta_docker_container_label_monitoring_blackbox_enable]
@@ -111,3 +110,18 @@ scrape_configs:
             target_label: instance
           - target_label: __address__
             replacement: blackbox-exporter:9115
+
+    - job_name: do-managed-mysql
+      scheme: https
+      metrics_path: /metrics
+      tls_config:
+          ca_file: /etc/prometheus/certs/do-managed-mysql-ca.crt
+      basic_auth:
+          username: ${DO_MANAGED_MYSQL_METRICS_USERNAME}
+          password: ${DO_MANAGED_MYSQL_METRICS_PASSWORD}
+      dns_sd_configs:
+          - names:
+                - ${DO_MANAGED_MYSQL_METRICS_HOST}
+            type: A
+            port: 9273
+            refresh_interval: 15s

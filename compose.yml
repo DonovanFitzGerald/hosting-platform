@@ -54,16 +54,21 @@ services:
         container_name: prometheus
         user: "0:0"
         restart: unless-stopped
+        entrypoint:
+            - /bin/sh
+            - -ec
         command:
-            - --config.file=/etc/prometheus/prometheus.yml
-            - --storage.tsdb.retention.time=${PROMETHEUS_RETENTION}
+            - |
+                envsubst < /etc/prometheus/prometheus.yml.tmpl > /etc/prometheus/prometheus.yml
+                exec /bin/prometheus \
+                --config.file=/etc/prometheus/prometheus.yml \
+                --storage.tsdb.retention.time=${PROMETHEUS_RETENTION}
         volumes:
-            - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+            - ./prometheus/prometheus.yml.tmpl:/etc/prometheus/prometheus.yml.tmpl:ro
             - ./prometheus/blackbox-targets-static.yml:/etc/prometheus/blackbox-targets-static.yml:ro
+            - ./prometheus/certs:/etc/prometheus/certs:ro
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - prometheus_data:/prometheus
-        networks:
-            - monitoring
 
     loki:
         image: grafana/loki:3.7.1
