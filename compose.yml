@@ -69,6 +69,8 @@ services:
             - ./prometheus/certs:/etc/prometheus/certs:ro
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - prometheus_data:/prometheus
+        networks:
+            - monitoring
 
     loki:
         image: grafana/loki:3.7.1
