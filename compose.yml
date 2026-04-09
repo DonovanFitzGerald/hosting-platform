@@ -50,7 +50,10 @@ services:
             - monitoring.blackbox.scheme=https
 
     prometheus:
-        image: prom/prometheus:v3.11.0
+        build:
+            context: ./prometheus
+            dockerfile: Dockerfile
+        image: local/prometheus-envsubst:v3.11.0
         container_name: prometheus
         user: "0:0"
         restart: unless-stopped
